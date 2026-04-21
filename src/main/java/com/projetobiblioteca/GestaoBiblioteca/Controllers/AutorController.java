@@ -2,6 +2,7 @@ package com.projetobiblioteca.GestaoBiblioteca.Controllers;
 
 import com.projetobiblioteca.GestaoBiblioteca.Dtos.AutorRequestDots;
 import com.projetobiblioteca.GestaoBiblioteca.Model.AutorModel;
+import com.projetobiblioteca.GestaoBiblioteca.Model.LivroModel;
 import com.projetobiblioteca.GestaoBiblioteca.Repository.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +31,20 @@ public class AutorController {
         autorRepository.save(autorM);
         return ResponseEntity.ok().body(dto);
     }
-    @GetMapping()
+
+    @GetMapping("/mostrarAutor")
     public ResponseEntity<List<AutorModel>> mostarAutores() {
         List<AutorModel> listAutor =  autorRepository.findAll();
         return ResponseEntity.ok(listAutor);
     }
+
+    @GetMapping("/mostrarAutor/{id}")
+    public ResponseEntity<AutorModel> mostarAutor(@PathVariable UUID id) {
+        return autorRepository.findById(id).map(autor -> {
+            return ResponseEntity.ok(autor);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<AutorRequestDots> atualizarAutor(@RequestBody AutorRequestDots dto, @PathVariable UUID id) {
         return autorRepository.findById(id).map(autorEncontrado -> {
@@ -45,6 +55,7 @@ public class AutorController {
                 return ResponseEntity.ok(dto);
         }).orElse(ResponseEntity.notFound().build());
     }
+
     @DeleteMapping("/deletar/{id}")
     public ResponseEntity<AutorModel> deletarAutor(@PathVariable UUID id) {
         return autorRepository.findById(id).map(autorEncontrado -> {

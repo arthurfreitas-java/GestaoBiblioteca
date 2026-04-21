@@ -2,6 +2,7 @@ package com.projetobiblioteca.GestaoBiblioteca.Model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +14,9 @@ public class AutorModel {
     UUID autorId;
     String nome;
     String nacionalidade;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    private List<LivroModel> livros;
 
     public UUID getId() {
         return autorId;
