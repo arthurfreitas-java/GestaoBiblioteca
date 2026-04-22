@@ -38,4 +38,22 @@ public class LivrosController {
     public ResponseEntity<LivroModel> mostrarUmLivro(@PathVariable UUID id) {
         return livroRepository.findById(id).map (livro -> ResponseEntity.ok(livro)).orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping("/editarlivros/{id}")
+    public ResponseEntity<LivroModel> ediatrLivro(@PathVariable UUID id, @RequestBody LivroDto dto) {
+        return livroRepository.findById(id).map(livro -> {
+            livro.setTitulo(dto.titulo());
+            livro.setIdAutor(dto.idAutor());
+            livroRepository.save(livro);
+            return ResponseEntity.ok().body(livro);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/deletarLivros/{id}")
+    public ResponseEntity<Object> deletarLivro(@PathVariable UUID id) {
+        return livroRepository.findById(id).map(livro -> {
+            livroRepository.delete(livro);
+            return ResponseEntity.noContent().build();
+        }).orElse(ResponseEntity.notFound().build());
+    }
 }

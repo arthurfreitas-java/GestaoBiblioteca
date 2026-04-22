@@ -57,10 +57,10 @@ public class AutorController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<AutorModel> deletarAutor(@PathVariable UUID id) {
-        return autorRepository.findById(id).map(autorEncontrado -> {
-            autorRepository.delete(autorEncontrado);
-            return ResponseEntity.ok(autorEncontrado);
-        }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Object> deletarAutor(@PathVariable UUID id) {
+            return autorRepository.findById(id).map(autor -> {
+                autorRepository.delete(autor);
+                return ResponseEntity.noContent().build();
+            }).orElse(ResponseEntity.notFound().build());
     }
 }
