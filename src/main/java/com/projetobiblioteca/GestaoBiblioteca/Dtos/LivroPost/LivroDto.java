@@ -1,4 +1,4 @@
-package com.projetobiblioteca.GestaoBiblioteca.Dtos;
+package com.projetobiblioteca.GestaoBiblioteca.Dtos.LivroPost;
 
 import org.antlr.v4.runtime.misc.NotNull;
 

@@ -1,10 +1,9 @@
 package com.projetobiblioteca.GestaoBiblioteca.Controllers;
 
-import com.projetobiblioteca.GestaoBiblioteca.Dtos.AutorRequestDots;
+import com.projetobiblioteca.GestaoBiblioteca.Dtos.AutorPost.AutorRequestDots;
+import com.projetobiblioteca.GestaoBiblioteca.Dtos.AutorPost.AutorResponseDto;
 import com.projetobiblioteca.GestaoBiblioteca.Model.AutorModel;
-import com.projetobiblioteca.GestaoBiblioteca.Model.LivroModel;
 import com.projetobiblioteca.GestaoBiblioteca.Repository.AutorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,14 +21,15 @@ public class AutorController {
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<AutorRequestDots> criarAutor(@RequestBody AutorRequestDots dto) {
+    public ResponseEntity<AutorResponseDto> criarAutor(@RequestBody AutorRequestDots dto) {
         AutorModel autorM = new  AutorModel();
 
         autorM.setNome(dto.nome());
         autorM.setNacionalidade(dto.nacionalidade());
 
         autorRepository.save(autorM);
-        return ResponseEntity.ok().body(dto);
+        AutorResponseDto responseDto = new AutorResponseDto(autorM);
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping("/mostrarAutor")
@@ -39,20 +39,22 @@ public class AutorController {
     }
 
     @GetMapping("/mostrarAutor/{id}")
-    public ResponseEntity<AutorModel> mostarAutor(@PathVariable UUID id) {
+    public ResponseEntity<AutorResponseDto> mostarAutor(@PathVariable UUID id) {
         return autorRepository.findById(id).map(autor -> {
-            return ResponseEntity.ok(autor);
+            AutorResponseDto responseDto = new AutorResponseDto(autor);
+            return ResponseEntity.ok(responseDto);
         }).orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<AutorRequestDots> atualizarAutor(@RequestBody AutorRequestDots dto, @PathVariable UUID id) {
+    public ResponseEntity<AutorResponseDto> atualizarAutor(@RequestBody AutorRequestDots dto, @PathVariable UUID id) {
         return autorRepository.findById(id).map(autorEncontrado -> {
                 autorEncontrado.setNome(dto.nome());
                 autorEncontrado.setNacionalidade(dto.nacionalidade());
                 autorRepository.save(autorEncontrado);
 
-                return ResponseEntity.ok(dto);
+                AutorResponseDto responseDto = new AutorResponseDto(autorEncontrado);
+                return ResponseEntity.ok(responseDto);
         }).orElse(ResponseEntity.notFound().build());
     }
 

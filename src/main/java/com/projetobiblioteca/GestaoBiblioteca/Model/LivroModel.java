@@ -8,14 +8,21 @@ import java.util.UUID;
 @Table(name="tb-Livros")
 public class LivroModel {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     UUID id;
     String titulo;
-    UUID idAutor;
 
     @ManyToOne
-    @JoinColumn(name = "autor_id")
+    @JoinColumn(name = "autor_id", nullable = false)
     private AutorModel autor;
+
+    public AutorModel getAutor() {
+        return autor;
+    }
+
+    public void setAutor(AutorModel autor) {
+        this.autor = autor;
+    }
 
     public String getTitulo() {
         return titulo;
@@ -31,13 +38,5 @@ public class LivroModel {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getIdAutor() {
-        return idAutor;
-    }
-
-    public void setIdAutor(UUID idAutor) {
-        this.idAutor = idAutor;
     }
 }
