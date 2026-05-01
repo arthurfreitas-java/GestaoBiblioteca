@@ -4,27 +4,29 @@ import com.projetobiblioteca.GestaoBiblioteca.Dtos.LivroGet.LivroResponseGetDto;
 import com.projetobiblioteca.GestaoBiblioteca.Dtos.LivroPost.LivroDto;
 import com.projetobiblioteca.GestaoBiblioteca.Dtos.LivroPost.LivroResponseDto;
 import com.projetobiblioteca.GestaoBiblioteca.Dtos.LivroPut.LivroRequestPutDto;
+import com.projetobiblioteca.GestaoBiblioteca.Model.EmprestimoModel;
 import com.projetobiblioteca.GestaoBiblioteca.Model.LivroModel;
 import com.projetobiblioteca.GestaoBiblioteca.Repository.AutorRepository;
+import com.projetobiblioteca.GestaoBiblioteca.Repository.EmprestimoRepository;
 import com.projetobiblioteca.GestaoBiblioteca.Repository.LivroRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 
 @RestController
 @RequestMapping("/livros")
 public class LivrosController {
     LivroRepository livroRepository;
     AutorRepository autorRepository;
+    EmprestimoRepository emprestimoRepository;
 
-    public LivrosController(LivroRepository livroRepository, AutorRepository autorRepository) {
+    public LivrosController(LivroRepository livroRepository, AutorRepository autorRepository, EmprestimoRepository emprestimoRepository) {
         this.livroRepository = livroRepository;
         this.autorRepository = autorRepository;
+        this.emprestimoRepository = emprestimoRepository;
     }
 
     @PostMapping("/criarlivros")
@@ -46,7 +48,7 @@ public class LivrosController {
     public ResponseEntity<List<LivroResponseGetDto>> mostrarLivros() {
         List<LivroModel> listaModel = livroRepository.findAll();
 
-        List<LivroResponseGetDto> resDto = listaModel.stream().map(livro -> new LivroResponseGetDto(livro)).toList();
+        List<LivroResponseGetDto> resDto = listaModel.stream().map(LivroResponseGetDto::new).toList();
 
         return ResponseEntity.ok().body(resDto);
 

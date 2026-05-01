@@ -2,6 +2,7 @@ package com.projetobiblioteca.GestaoBiblioteca.Model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -11,6 +12,8 @@ public class LivroModel {
     @GeneratedValue(strategy= GenerationType.AUTO)
     UUID id;
     String titulo;
+    boolean pegoLivro = true;
+
 
     @ManyToOne
     @JoinColumn(name = "autor_id", nullable = false)
@@ -38,5 +41,13 @@ public class LivroModel {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public boolean getPego() {
+        return pegoLivro;
+    }
+
+    public void setPego(boolean pegoLivro) {
+        this.pegoLivro = pegoLivro;
     }
 }
